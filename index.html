@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Master</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    background:linear-gradient(135deg,#141e30,#243b55);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:500px;
+    background:#111827;
+    padding:30px;
+    border-radius:15px;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+    text-align:center;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+.menu button,
+.answer-btn,
+.restart-btn{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.menu button{
+    background:#2563eb;
+    color:white;
+}
+
+.menu button:hover{
+    background:#1d4ed8;
+}
+
+.answer-btn{
+    background:#374151;
+    color:white;
+}
+
+.answer-btn:hover{
+    background:#4b5563;
+}
+
+.restart-btn{
+    background:#16a34a;
+    color:white;
+}
+
+.restart-btn:hover{
+    background:#15803d;
+}
+
+.question{
+    font-size:22px;
+    margin-bottom:20px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Quiz Master</h1>
+
+    <div id="menu" class="menu">
+        <button onclick="startQuiz('web')">Web Quiz</button>
+        <button onclick="startQuiz('pc')">Počítače Quiz</button>
+        <button onclick="startQuiz('games')">Herný Quiz</button>
+    </div>
+
+    <div id="quiz-container" style="display:none;">
+        <div class="question" id="question"></div>
+
+        <button class="answer-btn" onclick="checkAnswer(0)" id="a0"></button>
+        <button class="answer-btn" onclick="checkAnswer(1)" id="a1"></button>
+        <button class="answer-btn" onclick="checkAnswer(2)" id="a2"></button>
+        <button class="answer-btn" onclick="checkAnswer(3)" id="a3"></button>
+    </div>
+
+</div>
+
+<script>
+
+const quizzes = {
+
+web: [
+{
+    question:"Ktorý jazyk sa používa na tvorbu webu?",
+    answers:["Python","HTML","C++","Java"],
+    correct:1
+},
+{
+    question:"Čo znamená CSS?",
+    answers:[
+        "Computer Style Sheets",
+        "Creative Style System",
+        "Cascading Style Sheets",
+        "Colorful Style Sheets"
+    ],
+    correct:2
+},
+{
+    question:"Ktorý jazyk robí web interaktívny?",
+    answers:["HTML","CSS","JavaScript","SQL"],
+    correct:2
+}
+],
+
+pc: [
+{
+    question:"Čo znamená CPU?",
+    answers:[
+        "Central Processing Unit",
+        "Computer Power Unit",
+        "Control Program Utility",
+        "Central Program Unit"
+    ],
+    correct:0
+},
+{
+    question:"Ktorá súčiastka uchováva dáta?",
+    answers:[
+        "RAM",
+        "SSD",
+        "CPU",
+        "Zdroj"
+    ],
+    correct:1
+},
+{
+    question:"Na čo slúži RAM?",
+    answers:[
+        "Internet",
+        "Grafiku",
+        "Dočasnú pamäť",
+        "Napájanie"
+    ],
+    correct:2
+}
+],
+
+games: [
+{
+    question:"Ktorá hra je od Mojangu?",
+    answers:[
+        "Fortnite",
+        "Minecraft",
+        "Valorant",
+        "GTA V"
+    ],
+    correct:1
+},
+{
+    question:"Ktorá hra je battle royale?",
+    answers:[
+        "CS2",
+        "Minecraft",
+        "Fortnite",
+        "FIFA"
+    ],
+    correct:2
+},
+{
+    question:"Ktorá hra obsahuje agentov?",
+    answers:[
+        "Valorant",
+        "Minecraft",
+        "Rocket League",
+        "Roblox"
+    ],
+    correct:0
+}
+]
+
+};
+
+let currentQuiz = [];
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz(type){
+
+    currentQuiz = quizzes[type];
+    currentQuestion = 0;
+    score = 0;
+
+    document.getElementById("menu").style.display = "none";
+    document.getElementById("quiz-container").style.display = "block";
+
+    loadQuestion();
+}
+
+function loadQuestion(){
+
+    if(currentQuestion >= currentQuiz.length){
+
+        document.getElementById("quiz-container").innerHTML = `
+            <h2>Koniec kvízu!</h2>
+            <p>Získal si ${score} / ${currentQuiz.length} bodov.</p>
+
+            <button class="restart-btn" onclick="location.reload()">
+                Späť do menu
+            </button>
+        `;
+
+        return;
+    }
+
+    document.getElementById("question").innerText =
+        currentQuiz[currentQuestion].question;
+
+    for(let i=0;i<4;i++){
+
+        document.getElementById("a"+i).innerText =
+            currentQuiz[currentQuestion].answers[i];
+    }
+}
+
+function checkAnswer(answer){
+
+    if(answer === currentQuiz[currentQuestion].correct){
+        score++;
+    }
+
+    currentQuestion++;
+    loadQuestion();
+}
+
+</script>
+
+</body>
+</html>
